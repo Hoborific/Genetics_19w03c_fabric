@@ -1,0 +1,11 @@
+{
+  "id": "dyeablechicken",
+  "name": "Dyeable Mobs",
+  "version": "1.0.0",
+  "side": "universal",
+  "initializer": "dyeablechicken.Main",
+  "mixins": {
+    "client": "modid.client.json",
+    "common": "modid.common.json"
+  }
+}
