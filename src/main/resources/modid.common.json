@@ -3,7 +3,7 @@
   "package": "dyeablechicken.common.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "EntityEvents", "ChickenEventsInteract", "ChickenEventsRenderer"
+    "EntityEvents", "ChickenEventsRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

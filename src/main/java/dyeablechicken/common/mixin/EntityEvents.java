@@ -1,62 +1,71 @@
 package dyeablechicken.common.mixin;
 
 import dyeablechicken.common.IGeneticBase;
-import net.minecraft.entity.LivingEntity;
+import dyeablechicken.common.MyGenetics;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Hand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Arrays;
 import java.util.Random;
 
-@Mixin(LivingEntity.class)
+@Mixin(Entity.class)
 public class EntityEvents implements IGeneticBase {
-    private int[] GENETIC_VALUES = IGeneticBase.GENETIC_VALUES;
-    private boolean hasGenetics = false;
+    MyGenetics myGenes = new MyGenetics(this);
 
-    @Inject(at = @At("RETURN"), method = "writeCustomDataToTag")
-    public void writeCustomDataToTag(CompoundTag tag, CallbackInfo ci) {
-        if(this.getGenetics() != null){
-            tag.putIntArray("dyeablechicken:genes", this.GENETIC_VALUES);
-            tag.putBoolean("dyeablechicken:hasGenetics",this.hasGenetics);
-            System.out.println("Saved to tag Genetics " + Arrays.toString(this.GENETIC_VALUES));
-        }else{
-            System.out.println("not saving, no genetics");
+    @Inject(at = @At("RETURN"), method = "toTag")
+    public void toTag(CompoundTag tag, CallbackInfoReturnable cir) {
+        if(myGenes.getGenetics() == null){
+            initializeGenetics();
+        }else if(myGenes.hasGenetics){
+            tag.putIntArray("dyeablechicken:genes", myGenes.getGenetics());
+            tag.putBoolean("dyeablechicken:hasGenetics",myGenes.hasGenetics);
+            //System.out.println("Saved to tag Genetics " + Arrays.toString(myGenes.getGenetics()));
+        }else if(myGenes.getGenetics() != null && !myGenes.hasGenetics){
+            //System.out.println("not null, no genetics");
         }
 
     }
 
-    @Inject(at = @At("RETURN"), method = "initDataTracker")
-    public void initDataTracker(CallbackInfo ci){
-        initializeGenetics();
-    }
-
-    @Inject(at = @At("RETURN"), method = "readCustomDataFromTag", cancellable = true)
-    public void readCustomDataFromTag(CompoundTag tag, CallbackInfo ci) {
-        this.GENETIC_VALUES = tag.getIntArray("dyeablechicken:genes");
-        this.hasGenetics = tag.getBoolean("dyeablechicken:hasGenetics");
-        System.out.println("Loaded Genetics " + Arrays.toString(this.GENETIC_VALUES));
+    @Inject(at = @At("RETURN"), method = "fromTag", cancellable = true)
+    public void fromTag(CompoundTag tag, CallbackInfo ci) {
+        if(tag.getBoolean("dyeablechicken:hasGenetics")){
+            myGenes.setGenetics(tag.getIntArray("dyeablechicken:genes"));
+            myGenes.hasGenetics = tag.getBoolean("dyeablechicken:hasGenetics");
+            //System.out.println("Loaded from tag Genetics " + Arrays.toString(myGenes.getGenetics()));
+        }else{
+            //System.out.println("Nothing saved, skipping load");
+        }
     }
 
     @Override
     public void initializeGenetics() {
         Random randy = new Random();
-        if(this.getGenetics() == null){
-            this.GENETIC_VALUES = new int[]{randy.nextInt(10),randy.nextInt(10),randy.nextInt(10)};
-            this.hasGenetics = true;
-            System.out.println("INITIALIZED GENETICS: " + Arrays.toString( this.GENETIC_VALUES));
+        if(myGenes.getGenetics() == null || myGenes.getGenetics().length < 2){
+            myGenes.setGenetics(new int[]{randy.nextInt(10),randy.nextInt(10),randy.nextInt(10)});
+            myGenes.hasGenetics = true;
+            //System.out.println("INITIALIZED GENETICS: " + Arrays.toString( myGenes.getGenetics()));
         }
     }
-
+    @Inject(at = @At("RETURN"), method = "interact", cancellable = true)
+    public boolean interact(PlayerEntity playerEntity_1, Hand hand_1, CallbackInfoReturnable cir){
+        if(!playerEntity_1.getEntityWorld().isClient()){
+            System.out.println("interact: "+ Arrays.toString(myGenes.getGenetics()));
+        }return true;
+    }
     @Override
-    public int[] getGenetics() {
-        return this.GENETIC_VALUES;
+    public int[] getGenes() {
+        return myGenes.getGenetics();
     }
 
     @Override
-    public void setGenetics(int[] in) {
-        this.GENETIC_VALUES = in;
+    public void setGenes(int[] in) {
+        myGenes.setGenetics(in);
     }
 }
