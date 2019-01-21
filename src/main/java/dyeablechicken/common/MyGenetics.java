@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 public class MyGenetics {
 
-    private Object myself;
+    private Entity myself;
     public Boolean hasGenetics = false;
     private static TrackedData<String> GENETIC_TRACKER = DataTracker.registerData(Entity.class, TrackedDataHandlerRegistry.STRING);
     private DataTracker myDT;
@@ -29,6 +29,5 @@ public class MyGenetics {
     }
     public void setGenetics(String genes){
         myDT.set(GENETIC_TRACKER,genes);
-        myDT.method_12790();
     }
 }

@@ -4,7 +4,6 @@ import dyeablechicken.common.IGeneticBase;
 import dyeablechicken.common.MyGenetics;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Hand;
@@ -22,8 +21,6 @@ import java.util.Random;
 @Mixin(Entity.class)
 public class EntityEvents implements IGeneticBase {
     @Shadow
-    protected DataTracker dataTracker;
-    @Shadow
     public World world;
     MyGenetics myGenes = new MyGenetics((Entity)(Object)this);
     @Inject(at = @At("RETURN"), method = "toTag")
@@ -31,7 +28,7 @@ public class EntityEvents implements IGeneticBase {
             initializeGenetics();
             tag.putString("dyeablechicken:genes", myGenes.getGenetics());
             tag.putBoolean("dyeablechicken:hasGenetics", myGenes.hasGenetics);
-            //System.out.println("Saved to tag Genetics " + Arrays.toString(myGenes.getGenetics()));
+            System.out.println("Saved to tag Genetics " + myGenes.getGenetics());
 
     }
 
@@ -44,7 +41,7 @@ public class EntityEvents implements IGeneticBase {
     public void fromTag(CompoundTag tag, CallbackInfo ci) {
             myGenes.setGenetics(tag.getString("dyeablechicken:genes"));
             myGenes.hasGenetics = tag.getBoolean("dyeablechicken:hasGenetics");
-            //System.out.println("Loaded from tag Genetics " + Arrays.toString(myGenes.getGenetics()));
+            System.out.println("Loaded from tag Genetics " + myGenes.getGenetics());
         }
 
     @Override
@@ -53,13 +50,13 @@ public class EntityEvents implements IGeneticBase {
         if (myGenes.getGenetics().equals("[0, 1, 2]")){
             myGenes.setGenetics(Arrays.toString(new int[]{randy.nextInt(10), randy.nextInt(10), randy.nextInt(10)}));
             myGenes.hasGenetics = true;
-            //System.out.println("INITIALIZED GENETICS: " + Arrays.toString( myGenes.getGenetics()));
+            System.out.println("INITIALIZED GENETICS: " + myGenes.getGenetics());
         }
     }
 
     @Inject(at = @At("RETURN"), method = "interact", cancellable = true)
     public boolean interact(PlayerEntity playerEntity_1, Hand hand_1, CallbackInfoReturnable cir) {
         System.out.println("interact: " +myGenes.getClientGenetics());
-        return false;
+        return true;
     }
 }
