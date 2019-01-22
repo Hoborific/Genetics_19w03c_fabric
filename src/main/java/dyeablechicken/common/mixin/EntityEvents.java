@@ -28,39 +28,58 @@ public class EntityEvents implements IGeneticBase {
     MyGenetics myGenes = new MyGenetics((Entity)(Object)this);
     @Inject(at = @At("RETURN"), method = "toTag")
     public void toTag(CompoundTag tag, CallbackInfoReturnable cir) {
-        initializeGenetics();
-        tag.putString("dyeablechicken:genes", myGenes.getGenetics());
+        if (!world.isClient) {
+            tag.putIntArray("dyeablechicken:genes", myGenes.getGenetics());
         tag.putBoolean("dyeablechicken:hasGenetics", myGenes.hasGenetics);
-        log("Saved to tag Genetics " + myGenes.getGenetics());
-
+            //log("Saved to tag Genetics " + Arrays.toString(myGenes.getGenetics()));
+        }
     }
 
     @Inject(at = @At("RETURN"), method = "<init>", cancellable = true)
     public void init(EntityType<?> entityType_1, World world_1, CallbackInfo ci) {
-
+        //log("init constructor called");
+        initializeGenetics();
     }
 
     @Inject(at = @At("RETURN"), method = "fromTag", cancellable = true)
     public void fromTag(CompoundTag tag, CallbackInfo ci) {
-        myGenes.setGenetics(tag.getString("dyeablechicken:genes"));
-        myGenes.hasGenetics = tag.getBoolean("dyeablechicken:hasGenetics");
-        log("Loaded from tag Genetics " + myGenes.getGenetics());
+        if (!world.isClient) {
+            myGenes.setGenetics(tag.getIntArray("dyeablechicken:genes"));
+            myGenes.hasGenetics = tag.getBoolean("dyeablechicken:hasGenetics");
+            //log("Loaded from tag Genetics " + Arrays.toString(myGenes.getGenetics()));
+        }
     }
 
     @Override
     public void initializeGenetics() {
-        Random randy = new Random();
-        if (myGenes.getGenetics().equals("[0, 1, 2]")){
-            myGenes.setGenetics(Arrays.toString(new int[]{randy.nextInt(10), randy.nextInt(10), randy.nextInt(10)}));
+        if (!world.isClient) {
+            Random randy = new Random();
+            myGenes.setGenetics(new int[]{randy.nextInt(10), randy.nextInt(10), randy.nextInt(10)});
             myGenes.hasGenetics = true;
-            log("Initialized Genetics: " + myGenes.getGenetics());
+            //log("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
+        } else {
+
         }
+    }
+
+    @Override
+    public void setGeneticsFromPacket(int[] geneticarray) {
+        log("got genetics from packet ID: " + myGenes.getEntityID() + " " + Arrays.toString(geneticarray));
+        this.myGenes.setGenetics(geneticarray);
+    }
+
+    @Override
+    public int[] getGeneticsForPacket() {
+        return myGenes.getGenetics();
     }
 
     @Inject(at = @At("RETURN"), method = "interact", cancellable = true)
     public boolean interact(PlayerEntity playerEntity_1, Hand hand_1, CallbackInfoReturnable cir) {
-        log("interact: " + myGenes.getClientGenetics());
+        log("interact: " + Arrays.toString(myGenes.getGenetics()));
         log(Integer.toString(myGenes.getEntityID()));
+        if (!world.isClient) {
+            //myGenes.setGenetics(myGenes.getGenetics());
+        }
         return true;
     }
 }

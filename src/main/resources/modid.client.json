@@ -1,8 +1,9 @@
 {
   "required": true,
-  "package": "dyeablechicken.mixin",
+  "package": "dyeablechicken.common.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "WorldEvents"
   ],
   "injectors": {
     "defaultRequire": 1

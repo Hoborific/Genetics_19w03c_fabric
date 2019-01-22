@@ -1,9 +1,9 @@
 package dyeablechicken.util;
 
-public class Logger {
-    static private String ModName = "Dyeable Chicken";
+import dyeablechicken.Main;
 
+public class Logger {
     public static void log(String data) {
-        System.out.println("[" + ModName + "] " + data);
+        System.out.println("[" + Main.MODID + "] " + data);
     }
 }
