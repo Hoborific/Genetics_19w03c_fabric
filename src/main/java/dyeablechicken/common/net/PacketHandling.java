@@ -28,25 +28,40 @@ public class PacketHandling {
     public static Identifier GENETIC_REQUEST_PACKET = new Identifier(Main.MODID + "genetic_request");
 
     public static BiConsumer<PacketContext, PacketByteBuf> SYNC_PACKET_CONSUMER = (PacketContext, PacketByteBuf) -> {
-        int id = PacketByteBuf.readInt();
-        int[] arr = PacketByteBuf.readIntArray();
-        PlayerEntity player = PacketContext.getPlayer();
-        if (player == null) return;
-        World world = player.getEntityWorld();
-        if (world == null) return;
-        Entity entity = world.getEntityById(id);
-        if (entity == null) {
-            //log("Packet received but no reference of entityID in world: "+id);
-        } else {
-            log("packet being read: " + id + " arr: " + Arrays.toString(arr));
-            ((IGeneticBase) entity).setGeneticsFromPacket(arr);
-        }
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                int id = PacketByteBuf.readInt();
+                int[] arr = PacketByteBuf.readIntArray();
+                PlayerEntity player = PacketContext.getPlayer();
+                if (player == null) return;
+                World world = player.getEntityWorld();
+                if (world == null) return;
+                Entity entity = world.getEntityById(id);
+                if (entity == null) {
+                    //log("Packet received but no reference of entityID in world: "+id);
+                } else {
+                    log("packet being read: " + id + " arr: " + Arrays.toString(arr));
+                    ((IGeneticBase) entity).setGeneticsFromPacket(arr);
+                }
+            }
+        };
+        PacketContext.getTaskQueue().execute(runnable);
     };
 
     public static BiConsumer<PacketContext, PacketByteBuf> REQUEST_PACKET_CONSUMER = (PacketContext, PacketByteBuf) -> {
         int id = PacketByteBuf.readInt();
         PlayerEntity player = PacketContext.getPlayer();
-        sendPacketToPlayer(craftGeneticPacket(id, ((IGeneticBase) player.world.getWorld().getEntityById(id)).getGeneticsForPacket()), player.world, player.getPos());
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                World wrld = player.world.getWorld();
+                Entity en = wrld.getEntityById(id);
+                int[] genes = ((IGeneticBase) en).getGeneticsForPacket();
+                sendPacketToPlayer(craftGeneticPacket(id, genes), player.world, player.getPos());
+            }
+        };
+        PacketContext.getTaskQueue().executeFuture(runnable);
     };
 
     public static Packet craftGeneticPacket(int id, int[] genes) {

@@ -37,7 +37,6 @@ public class EntityEvents implements IGeneticBase {
 
     @Inject(at = @At("RETURN"), method = "<init>", cancellable = true)
     public void init(EntityType<?> entityType_1, World world_1, CallbackInfo ci) {
-        //log("init constructor called");
         initializeGenetics();
     }
 
@@ -70,6 +69,14 @@ public class EntityEvents implements IGeneticBase {
 
     @Override
     public int[] getGeneticsForPacket() {
+        if (myGenes.getGenetics().length < 2) {
+            System.out.println(" ERROR: ENTITY HAS NO GENETICS: " + myGenes.getEntityID() + " " + myGenes.getWorld().getEntityById(myGenes.getEntityID()).getClass().getCanonicalName());
+            initializeGenetics();
+            if (myGenes.getGenetics().length < 2) {
+                System.out.println(" ERROR: ENTITY STILL HAS NO GENETICS: " + myGenes.getEntityID() + " " + myGenes.getWorld().getEntityById(myGenes.getEntityID()).getClass().getCanonicalName());
+                return new int[]{-1, -1, -1};
+            }
+        }
         return myGenes.getGenetics();
     }
 
@@ -78,7 +85,7 @@ public class EntityEvents implements IGeneticBase {
         log("interact: " + Arrays.toString(myGenes.getGenetics()));
         log(Integer.toString(myGenes.getEntityID()));
         if (!world.isClient) {
-            //myGenes.setGenetics(myGenes.getGenetics());
+            myGenes.setGenetics(myGenes.getGenetics());
         }
         return true;
     }

@@ -7,6 +7,7 @@ import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.Packet;
 import net.minecraft.text.StringTextComponent;
+import net.minecraft.world.World;
 
 import java.util.Arrays;
 
@@ -31,6 +32,9 @@ public class MyGenetics {
         return GENETIC_TRACKER;
     }
 
+    public World getWorld() {
+        return this.myself.getEntityWorld();
+    }
     public void setGenetics(int[] genes) {
         GENETIC_TRACKER = genes;
         if (myself instanceof PlayerEntity) return;
