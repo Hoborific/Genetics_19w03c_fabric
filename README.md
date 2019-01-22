@@ -1,17 +1,9 @@
-# Fabric Example Mod
+# Genetics mod for Fabric (19w03c)
 
-## Setup
-
-1. Edit build.gradle and mod.json to suit your needs.
-    * The "mixins" object can be removed from mod.json if you do not need to use mixins.
-    * Please replace all occurences of "modid" with your own mod ID - sometimes, a different string may also suffice.
-2. Run the following command:
-
-```
-./gradlew idea
-```
+## what it do?
+Genetics aims to create a more in-depth genetic(statistical) system to all entities in Minecraft, the aim is create a more complex breeding system and a lot of interesting things along the way.
 
 ## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+This mod is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects. (do whatever you want)
 # Genetics_19w03c_fabric
