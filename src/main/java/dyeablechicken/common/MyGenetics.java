@@ -27,7 +27,9 @@ public class MyGenetics {
     public String getClientGenetics(){
         return myDT.get(GENETIC_TRACKER);
     }
-    public void setGenetics(String genes){
-        myDT.set(GENETIC_TRACKER,genes);
+
+    public void setGenetics(String genes) {
+        myDT.set(GENETIC_TRACKER, genes);
+
     }
 }

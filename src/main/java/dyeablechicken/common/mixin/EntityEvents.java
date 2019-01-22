@@ -18,6 +18,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Arrays;
 import java.util.Random;
 
+import static dyeablechicken.util.Logger.log;
+
+
 @Mixin(Entity.class)
 public class EntityEvents implements IGeneticBase {
     @Shadow
@@ -28,7 +31,7 @@ public class EntityEvents implements IGeneticBase {
             initializeGenetics();
             tag.putString("dyeablechicken:genes", myGenes.getGenetics());
             tag.putBoolean("dyeablechicken:hasGenetics", myGenes.hasGenetics);
-            System.out.println("Saved to tag Genetics " + myGenes.getGenetics());
+            log("Saved to tag Genetics " + myGenes.getGenetics());
 
     }
 
@@ -41,7 +44,7 @@ public class EntityEvents implements IGeneticBase {
     public void fromTag(CompoundTag tag, CallbackInfo ci) {
             myGenes.setGenetics(tag.getString("dyeablechicken:genes"));
             myGenes.hasGenetics = tag.getBoolean("dyeablechicken:hasGenetics");
-            System.out.println("Loaded from tag Genetics " + myGenes.getGenetics());
+            log("Loaded from tag Genetics " + myGenes.getGenetics());
         }
 
     @Override
@@ -50,13 +53,13 @@ public class EntityEvents implements IGeneticBase {
         if (myGenes.getGenetics().equals("[0, 1, 2]")){
             myGenes.setGenetics(Arrays.toString(new int[]{randy.nextInt(10), randy.nextInt(10), randy.nextInt(10)}));
             myGenes.hasGenetics = true;
-            System.out.println("INITIALIZED GENETICS: " + myGenes.getGenetics());
+            log("INITIALIZED GENETICS: " + myGenes.getGenetics());
         }
     }
 
     @Inject(at = @At("RETURN"), method = "interact", cancellable = true)
     public boolean interact(PlayerEntity playerEntity_1, Hand hand_1, CallbackInfoReturnable cir) {
-        System.out.println("interact: " +myGenes.getClientGenetics());
+        log("interact: " + myGenes.getClientGenetics());
         return true;
     }
 }

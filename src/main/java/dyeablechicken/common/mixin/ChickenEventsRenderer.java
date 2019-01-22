@@ -16,7 +16,7 @@ public abstract class ChickenEventsRenderer{
 
     @Inject(at = @At("HEAD"), method = "getColor", cancellable = true)
     public int getColor(ChickenEntity entity, CallbackInfoReturnable ret) {
-        //System.out.println(entity.getAttributeContainer().get("color"));
+        //log(entity.getAttributeContainer().get("color"));
         Random rand = new Random();
         return rand.nextInt(16);
 
