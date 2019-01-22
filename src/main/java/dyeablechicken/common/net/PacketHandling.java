@@ -38,7 +38,7 @@ public class PacketHandling {
         if (entity == null) {
             //log("Packet received but no reference of entityID in world: "+id);
         } else {
-            log("packet being decrypted: " + id + " arr: " + Arrays.toString(arr));
+            log("packet being read: " + id + " arr: " + Arrays.toString(arr));
             ((IGeneticBase) entity).setGeneticsFromPacket(arr);
         }
     };
@@ -46,7 +46,7 @@ public class PacketHandling {
     public static BiConsumer<PacketContext, PacketByteBuf> REQUEST_PACKET_CONSUMER = (PacketContext, PacketByteBuf) -> {
         int id = PacketByteBuf.readInt();
         PlayerEntity player = PacketContext.getPlayer();
-        sendPacketToPlayer(craftGeneticPacket(id, ((IGeneticBase) Objects.requireNonNull(player.world.getWorld().getEntityById(id))).getGeneticsForPacket()), player.world, player.getPos());
+        sendPacketToPlayer(craftGeneticPacket(id, ((IGeneticBase) player.world.getWorld().getEntityById(id)).getGeneticsForPacket()), player.world, player.getPos());
     };
 
     public static Packet craftGeneticPacket(int id, int[] genes) {

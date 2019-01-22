@@ -30,7 +30,7 @@ public class EntityEvents implements IGeneticBase {
     public void toTag(CompoundTag tag, CallbackInfoReturnable cir) {
         if (!world.isClient) {
             tag.putIntArray("dyeablechicken:genes", myGenes.getGenetics());
-        tag.putBoolean("dyeablechicken:hasGenetics", myGenes.hasGenetics);
+            tag.putBoolean("dyeablechicken:hasGenetics", myGenes.hasGenetics);
             //log("Saved to tag Genetics " + Arrays.toString(myGenes.getGenetics()));
         }
     }
