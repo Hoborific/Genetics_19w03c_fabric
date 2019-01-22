@@ -8,6 +8,8 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 
 import java.util.Arrays;
 
+import static dyeablechicken.util.Logger.log;
+
 public class MyGenetics {
 
     private Entity myself;
@@ -22,14 +24,26 @@ public class MyGenetics {
     }
 
     public String getGenetics(){
+        if (myself.getEntityWorld().isClient) {
+            log("CALLED getGenetics on CLIENT");
+        }
         return myDT.get(GENETIC_TRACKER);
     }
     public String getClientGenetics(){
+        if (myself.getEntityWorld().isClient) {
+            log("CALLED getClientGenetics on CLIENT");
+        }
         return myDT.get(GENETIC_TRACKER);
     }
 
     public void setGenetics(String genes) {
         myDT.set(GENETIC_TRACKER, genes);
-
+        if (myself.getEntityWorld().isClient) {
+            log("CALLED setGenetics on CLIENT");
+        }
     }
+    public int getEntityID(){
+            return myself.getEntityId();
+    }
+
 }
