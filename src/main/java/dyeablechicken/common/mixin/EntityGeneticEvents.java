@@ -20,7 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Arrays;
 import java.util.Random;
 
-import static dyeablechicken.util.Logger.*;
+import static dyeablechicken.util.Logger.debugLog;
+import static dyeablechicken.util.Logger.log;
 
 
 @Mixin(Entity.class)
@@ -143,6 +144,6 @@ public class EntityGeneticEvents implements IGeneticBase {
                 //myGenes.setGenetics(myGenes.getGenetics());
             }
         }
-        return true;
+        return false;
     }
 }
