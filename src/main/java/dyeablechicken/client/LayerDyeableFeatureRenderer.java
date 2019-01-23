@@ -32,7 +32,7 @@ public class LayerDyeableFeatureRenderer extends FeatureRenderer<MobEntity, Enti
 
     @Override
     public void render(MobEntity en, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-        this.bindTexture(LAYER_TEXTURES); //bindTexture
+        this.bindTexture(LAYER_TEXTURES);
         float[] afloat = SheepEntity.getRgbColor(this.getColor(en));
         GlStateManager.enableColorMaterial();
         GlStateManager.color3f(afloat[0], afloat[1], afloat[2]);

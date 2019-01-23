@@ -14,7 +14,14 @@ import java.util.Arrays;
 import static dyeablechicken.util.Logger.log;
 
 
-@Mixin({ChickenEntity.class, CowEntity.class, HorseEntity.class, LlamaEntity.class, MooshroomEntity.class, OcelotEntity.class, PandaEntity.class, PigEntity.class, RabbitEntity.class, SheepEntity.class, WolfEntity.class})
+@Mixin({
+        ChickenEntity.class, CatEntity.class, CowEntity.class,
+        DonkeyEntity.class, HorseEntity.class, LlamaEntity.class,
+        MooshroomEntity.class, OcelotEntity.class, PandaEntity.class,
+        PandaEntity.class, ParrotEntity.class, PigEntity.class,
+        PolarBearEntity.class, RabbitEntity.class, SheepEntity.class,
+        TurtleEntity.class, WolfEntity.class
+})//turtle has an egg class and probably doesn't work
 public class GenericEntityMixin {
 
     @Inject(at = @At("RETURN"), method = "createChild", cancellable = true)
