@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-import static dyeablechicken.util.Logger.log;
+import static dyeablechicken.util.Logger.*;
 
 public class PacketHandling {
 
@@ -39,7 +39,7 @@ public class PacketHandling {
                 if (world == null) return;
                 Entity entity = world.getEntityById(id);
                 if (entity == null) {
-                    //log("Packet received but no reference of entityID in world: "+id);
+                    debugLog("Packet received but no reference of entityID in world: "+id);
                 } else {
                     log("packet being read: " + id + " arr: " + Arrays.toString(arr));
                     ((IGeneticBase) entity).setGeneticsFromPacket(arr);
@@ -78,19 +78,19 @@ public class PacketHandling {
     }
 
     public static void sendPacketToPlayer(Packet pak, World world, BlockPos pos) {
-        //log("begin sendPacketToPlayer");
+        debugLog("begin sendPacketToPlayer");
         if (!world.isClient) {
-            //log("getting player list");
+            debugLog("getting player list");
             List<ServerPlayerEntity> players = world.getPlayers(ServerPlayerEntity.class, Objects::nonNull);
             if (players.size() > 0) {
-                //log("for each player");
+                debugLog("for each player");
                 for (ServerPlayerEntity player : players) {
-                    //log("sending packet to player");
+                    debugLog("sending packet to player");
                     player.networkHandler.sendPacket(pak);
                 }
-                //log("out of loop");
+                debugLog("out of loop");
             }
-            //log("end sendPacketToPlayer");
+            debugLog("end sendPacketToPlayer");
         }
     }
 

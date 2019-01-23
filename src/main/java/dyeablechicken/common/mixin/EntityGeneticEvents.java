@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Arrays;
 import java.util.Random;
 
-import static dyeablechicken.util.Logger.log;
+import static dyeablechicken.util.Logger.*;
 
 
 @Mixin(Entity.class)
@@ -36,7 +36,7 @@ public class EntityGeneticEvents implements IGeneticBase {
             if (!world.isClient) {
                 tag.putIntArray("dyeablechicken:genes", myGenes.getGenetics());
                 tag.putBoolean("dyeablechicken:hasGenetics", myGenes.hasGenetics);
-                //log("Saved to tag Genetics " + Arrays.toString(myGenes.getGenetics()));
+                debugLog("Saved to tag Genetics " + Arrays.toString(myGenes.getGenetics()));
             }
     }
 
@@ -53,7 +53,7 @@ public class EntityGeneticEvents implements IGeneticBase {
 
                 myGenes.setGenetics(tag.getIntArray("dyeablechicken:genes"));
                 myGenes.hasGenetics = tag.getBoolean("dyeablechicken:hasGenetics");
-                //log("Loaded from tag Genetics " + Arrays.toString(myGenes.getGenetics()));
+                debugLog("Loaded from tag Genetics " + Arrays.toString(myGenes.getGenetics()));
             }
     }
 
@@ -62,7 +62,7 @@ public class EntityGeneticEvents implements IGeneticBase {
         if (!world.isClient) {
             myGenes.setGenetics(generateGenetics());
             myGenes.hasGenetics = true;
-            //log("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
+            debugLog("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
         }
     }
 
@@ -71,7 +71,7 @@ public class EntityGeneticEvents implements IGeneticBase {
         if (!world.isClient) {
             myGenes.setGenetics(generateGenetics(mum, dad));
             myGenes.hasGenetics = true;
-            //log("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
+            debugLog("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
         }
     }
 
@@ -123,15 +123,17 @@ public class EntityGeneticEvents implements IGeneticBase {
     @Override
     public int[] getGenetics() {
         if (myGenes.getGenetics().length < 2) {
-            System.out.println(" ERROR: ENTITY HAS NO GENETICS: " + myGenes.getEntityID() + " " + myGenes.getWorld().getEntityById(myGenes.getEntityID()).getClass().getCanonicalName());
+            log("ERROR: ENTITY HAS NO GENETICS: " + myGenes.getEntityID() + " " + myGenes.getWorld().getEntityById(myGenes.getEntityID()).getClass().getCanonicalName());
             initializeGenetics();
             if (myGenes.getGenetics().length < 2) {
-                System.out.println(" ERROR: ENTITY STILL HAS NO GENETICS: " + myGenes.getEntityID() + " " + myGenes.getWorld().getEntityById(myGenes.getEntityID()).getClass().getCanonicalName());
+                log("ERROR: ENTITY STILL HAS NO GENETICS: " + myGenes.getEntityID() + " " + myGenes.getWorld().getEntityById(myGenes.getEntityID()).getClass().getCanonicalName());
                 return new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
             }
         }
         return myGenes.getGenetics();
     }
+
+    // Following function interferes with interaction behavior
 
     @Inject(at = @At("RETURN"), method = "interact", cancellable = true)
     public boolean interact(PlayerEntity playerEntity_1, Hand hand_1, CallbackInfoReturnable cir) {
