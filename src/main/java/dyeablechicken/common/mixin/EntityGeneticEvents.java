@@ -29,8 +29,9 @@ public class EntityGeneticEvents implements IGeneticBase {
     @Shadow
     public World world;
     Entity e = (Entity)(Object)this;
-
     MyGenetics myGenes = new MyGenetics((Entity)(Object)this);
+
+
     @Inject(at = @At("RETURN"), method = "toTag")
     public void toTag(CompoundTag tag, CallbackInfoReturnable cir) {
         if (e instanceof LivingEntity)
@@ -117,7 +118,7 @@ public class EntityGeneticEvents implements IGeneticBase {
 
     @Override
     public void setGeneticsFromPacket(int[] geneticarray) {
-        log("got genetics from packet ID: " + myGenes.getEntityID() + " " + Arrays.toString(geneticarray));
+        debugLog("got genetics from packet ID: " + myGenes.getEntityID() + " " + Arrays.toString(geneticarray));
         this.myGenes.setGenetics(geneticarray);
     }
 

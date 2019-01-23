@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 
-import static dyeablechicken.util.Logger.*;
+import static dyeablechicken.util.Logger.debugLog;
 
 public class PacketHandling {
 
@@ -41,7 +41,7 @@ public class PacketHandling {
                 if (entity == null) {
                     debugLog("Packet received but no reference of entityID in world: "+id);
                 } else {
-                    log("packet being read: " + id + " arr: " + Arrays.toString(arr));
+                    debugLog("packet being read: " + id + " arr: " + Arrays.toString(arr));
                     ((IGeneticBase) entity).setGeneticsFromPacket(arr);
                 }
             }
