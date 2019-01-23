@@ -1,7 +1,7 @@
 package dyeablechicken.common.net;
 
 import dyeablechicken.Main;
-import dyeablechicken.common.IGeneticBase;
+import dyeablechicken.common.genetics.IGeneticBase;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.fabric.networking.PacketContext;
 import net.minecraft.client.network.packet.CustomPayloadClientPacket;

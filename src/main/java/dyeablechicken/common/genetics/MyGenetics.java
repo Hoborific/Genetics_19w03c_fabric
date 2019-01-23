@@ -1,4 +1,4 @@
-package dyeablechicken.common;
+package dyeablechicken.common.genetics;
 
 
 import dyeablechicken.common.net.PacketHandling;
@@ -15,6 +15,9 @@ public class MyGenetics {
 
     private Entity myself;
     public Boolean hasGenetics = false;
+    public Boolean hasParents = false;
+    public int parent1;
+    public int parent2;
     protected int[] GENETIC_TRACKER;
 
     private DataTracker myDT;
@@ -22,7 +25,7 @@ public class MyGenetics {
     public MyGenetics(Entity en) {
         this.myself = en;
         myDT = new DataTracker(en);
-        GENETIC_TRACKER = new int[]{0, 1, 2};
+        GENETIC_TRACKER = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     }
 
     public int[] getGenetics() {

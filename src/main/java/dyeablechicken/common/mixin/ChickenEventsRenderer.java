@@ -1,7 +1,7 @@
 package dyeablechicken.common.mixin;
 
 import dyeablechicken.client.LayerDyeableFeatureRenderer;
-import dyeablechicken.common.IGeneticBase;
+import dyeablechicken.common.genetics.IGeneticBase;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.util.DyeColor;
 import org.spongepowered.asm.mixin.Mixin;

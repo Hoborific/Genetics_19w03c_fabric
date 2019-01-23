@@ -1,6 +1,7 @@
 package dyeablechicken.common.mixin;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.network.Packet;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,10 +16,11 @@ public class WorldEvents {
 
     @Inject(at = @At("RETURN"), method = "onEntityAdded")
     protected void onEntityAdded(Entity en, CallbackInfo ci) {
-        if (en.world.isClient) {
-            Packet pak = craftGeneticRequestPacket(en.getEntityId());
-            en.world.sendPacket(pak);
-        }
+        if (en instanceof LivingEntity)
+            if (en.world.isClient) {
+                Packet pak = craftGeneticRequestPacket(en.getEntityId());
+                en.world.sendPacket(pak);
+            }
     }
 }
 

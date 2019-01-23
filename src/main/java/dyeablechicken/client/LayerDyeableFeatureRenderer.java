@@ -1,7 +1,7 @@
 package dyeablechicken.client;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import dyeablechicken.common.IGeneticBase;
+import dyeablechicken.common.genetics.IGeneticBase;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.ChickenEntityModel;

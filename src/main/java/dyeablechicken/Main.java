@@ -12,6 +12,8 @@ public class Main implements ModInitializer {
 
 	public static final String MODID = "dyeablechicken";
 
+
+
 	@Override
 	public void onInitialize() {
 		EntityRendererRegistry.INSTANCE.register(ChickenEntity.class, RenderDyeableChicken::new);
