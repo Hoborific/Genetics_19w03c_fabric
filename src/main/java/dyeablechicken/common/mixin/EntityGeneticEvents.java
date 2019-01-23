@@ -154,6 +154,7 @@ public class EntityGeneticEvents implements IGeneticBase {
                 itemStack_1.subtractAmount(1);
                 ItemStack newSyringe = new ItemStack(Initializer.SYRINGE_FULL);
                 ((IGeneSample)newSyringe.getItem()).setGenes(myGenes.getGenetics());
+                ((IGeneSample)newSyringe.getItem()).setEntityType(e.getName().getString());
                 if (itemStack_1.isEmpty()) {
                     playerEntity_1.setStackInHand(hand_1, newSyringe);
                 } else if (!playerEntity_1.inventory.insertStack(newSyringe)) {

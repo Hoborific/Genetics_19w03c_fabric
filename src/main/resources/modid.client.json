@@ -3,7 +3,8 @@
   "package": "dyeablechicken.common.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "WorldEvents"
+    "WorldEvents",
+    "ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1
