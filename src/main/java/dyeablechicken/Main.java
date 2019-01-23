@@ -2,6 +2,7 @@ package dyeablechicken;
 
 import dyeablechicken.client.GeneticChickenRenderer;
 import dyeablechicken.client.GeneticCowRenderer;
+import dyeablechicken.init.Initializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.client.render.EntityRendererRegistry;
 import net.fabricmc.fabric.networking.CustomPayloadPacketRegistry;
@@ -25,6 +26,7 @@ public class Main implements ModInitializer {
 		CustomPayloadPacketRegistry.CLIENT.register(GENETIC_SYNC_PACKET, SYNC_PACKET_CONSUMER);
 		CustomPayloadPacketRegistry.SERVER.register(GENETIC_REQUEST_PACKET, REQUEST_PACKET_CONSUMER);
 
+        Initializer.init();
 	}
 
 
