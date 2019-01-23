@@ -14,11 +14,13 @@ import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class GeneticCowRenderer extends MobEntityRenderer<MobEntity, EntityModel<MobEntity>> {
     private static final Identifier COW_BASE = new Identifier("dyeablechicken:textures/entity/dyeablechicken/cow_base.png");
-    private static final Identifier COW_LAYER_1 = new Identifier("dyeablechicken:textures/entity/dyeablechicken/cow_layer.png");
+    private static final Identifier COW_LAYER_1 = new Identifier("dyeablechicken:textures/entity/dyeablechicken/cow_hide1.png");
+    private static final Identifier COW_LAYER_2 = new Identifier("dyeablechicken:textures/entity/dyeablechicken/cow_spots3.png");
 
     public GeneticCowRenderer(EntityRenderDispatcher renderManagerIn, EntityRendererRegistry.Context context) {
         super(renderManagerIn, new CowEntityModel<>(), 0.3f);
-        this.addFeature(new LayerDyeableFeatureRenderer(this, COW_LAYER_1));
+        this.addFeature(new LayerDyeableFeatureRenderer(this, COW_LAYER_1, 3));
+        this.addFeature(new LayerDyeableFeatureRenderer(this, COW_LAYER_2, 7));
         this.bindTexture(COW_BASE);
 
     }

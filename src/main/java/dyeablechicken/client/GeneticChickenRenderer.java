@@ -21,7 +21,7 @@ public class GeneticChickenRenderer extends MobEntityRenderer<MobEntity, EntityM
 
     public GeneticChickenRenderer(EntityRenderDispatcher renderManagerIn, EntityRendererRegistry.Context context) {
         super(renderManagerIn, new ChickenEntityModel<>(), 0.3f);
-        this.addFeature(new LayerDyeableFeatureRenderer(this, CHICKEN_LAYER_TEXTURE));
+        this.addFeature(new LayerDyeableFeatureRenderer(this, CHICKEN_LAYER_TEXTURE, 0));
         this.bindTexture(CHICKEN_TEXTURE);
     }
 

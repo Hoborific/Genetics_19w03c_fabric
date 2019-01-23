@@ -15,22 +15,24 @@ import net.minecraft.util.Identifier;
 public class LayerDyeableFeatureRenderer extends FeatureRenderer<MobEntity, EntityModel<MobEntity>> {
     private final EntityModel<MobEntity> myModel;
     private final Identifier LAYER_TEXTURES;
+    int geneticToTrack;
 
-    LayerDyeableFeatureRenderer(FeatureRendererContext<MobEntity, EntityModel<MobEntity>> var1, Identifier texture) {
+    LayerDyeableFeatureRenderer(FeatureRendererContext<MobEntity, EntityModel<MobEntity>> var1, Identifier texture, int geneIndex) {
         super(var1);
         myModel = var1.getModel();
         LAYER_TEXTURES = texture;
+        geneticToTrack = geneIndex;
+
 
     }
 
     private DyeColor getColor(Entity entity) {
-        return DyeColor.byId(((IGeneticBase) entity).getGenetics()[0]);
+        return DyeColor.byId(((IGeneticBase) entity).getGenetics()[geneticToTrack]);
     }
 
     @Override
     public void render(MobEntity en, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
         this.bindTexture(LAYER_TEXTURES); //bindTexture
-
         float[] afloat = SheepEntity.getRgbColor(this.getColor(en));
         GlStateManager.enableColorMaterial();
         GlStateManager.color3f(afloat[0], afloat[1], afloat[2]);
