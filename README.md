@@ -5,5 +5,6 @@ Genetics aims to create a more in-depth genetic(statistical) system for all enti
 
 ## License
 
-This mod is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects. (do whatever you want)
+This mod is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+(do whatever you want)
 # Genetics_19w03c_fabric

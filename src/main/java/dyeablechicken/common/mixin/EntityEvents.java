@@ -6,7 +6,6 @@ import dyeablechicken.common.genetics.MyGenetics;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Hand;
@@ -61,12 +60,9 @@ public class EntityEvents implements IGeneticBase {
     @Override
     public void initializeGenetics() {
         if (!world.isClient) {
-            if (e instanceof PassiveEntity)
-                myGenes.setGenetics(generateGenetics());
-                myGenes.hasGenetics = true;
+            myGenes.setGenetics(generateGenetics());
+            myGenes.hasGenetics = true;
             //log("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
-        } else {
-
         }
     }
 
@@ -101,6 +97,11 @@ public class EntityEvents implements IGeneticBase {
         }
 
         return newGenetics;
+    }
+
+    @Override
+    public void setGeneticsInherited(int[] arr) {
+        myGenes.setGenetics(arr);
     }
 
 

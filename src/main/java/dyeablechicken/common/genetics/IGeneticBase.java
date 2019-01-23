@@ -3,7 +3,7 @@ package dyeablechicken.common.genetics;
 import com.sun.istack.internal.NotNull;
 
 public interface IGeneticBase {
-    public static int genomeSize = 10;
+    int genomeSize = 10;
 
     int[] GENETIC_VALUES = null;
 
@@ -16,4 +16,6 @@ public interface IGeneticBase {
     int[] generateGenetics(@NotNull int[] parent1, @NotNull int[] parent2);
 
     int[] generateGenetics();
+
+    void setGeneticsInherited(int[] arr);
 }

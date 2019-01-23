@@ -5,8 +5,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import static dyeablechicken.util.Logger.log;
@@ -15,7 +13,7 @@ import static dyeablechicken.util.Logger.log;
 @Mixin(ChickenEntity.class)
 public class ChickenEntityMixin {
 
-    @Inject(at = @At("RETURN"), method = "createChild", cancellable = true)
+    //@Inject(at = @At("RETURN"), method = "createChild", cancellable = true)
     public void createChild(PassiveEntity passiveEntity, CallbackInfoReturnable<ChickenEntity> muhChicken) {
         ChickenEntity child =  muhChicken.getReturnValue();
         Entity e = (Entity)(Object) this;

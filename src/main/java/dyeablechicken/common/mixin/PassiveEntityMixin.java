@@ -2,8 +2,6 @@ package dyeablechicken.common.mixin;
 
 import dyeablechicken.common.genetics.IGeneticBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.ChickenEntity;
 import net.minecraft.entity.passive.PassiveEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,14 +23,11 @@ public class PassiveEntityMixin {
             /* idk deliver babies or whatever */
             int [] parent1 = ((IGeneticBase)e).getGeneticsForPacket();
             int [] parent2 = ((IGeneticBase)passiveEntity).getGeneticsForPacket();
-
-
-            ((IGeneticBase)child).setGeneticsFromPacket(((IGeneticBase)child).generateGenetics(parent1,parent2));
-
-            log("in createChild");
+            ((IGeneticBase) child).setGeneticsInherited(((IGeneticBase) child).generateGenetics(parent1, parent2));
+            log("passiveEntity create child end");
         }
 
-        muhBabies.setReturnValue(child); // if child is a new instance
+        muhBabies.setReturnValue(child);
     }
 
 }
