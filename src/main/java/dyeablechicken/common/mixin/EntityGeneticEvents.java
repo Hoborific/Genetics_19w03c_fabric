@@ -1,12 +1,16 @@
 package dyeablechicken.common.mixin;
 
 import com.sun.istack.internal.NotNull;
+import dyeablechicken.common.genetics.IGeneSample;
 import dyeablechicken.common.genetics.IGeneticBase;
 import dyeablechicken.common.genetics.MyGenetics;
+import dyeablechicken.init.Initializer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
@@ -138,13 +142,28 @@ public class EntityGeneticEvents implements IGeneticBase {
     // Following function interferes with interaction behavior
 
     @Inject(at = @At("RETURN"), method = "interact", cancellable = true)
-    public boolean interact(PlayerEntity playerEntity_1, Hand hand_1, CallbackInfoReturnable cir) {
+    public void interact(PlayerEntity playerEntity_1, Hand hand_1, CallbackInfoReturnable cir) {
         if (e instanceof LivingEntity) {
             log("Interacting with: " + myGenes.getEntityID() + " Genes: " + Arrays.toString(myGenes.getGenetics()));
             if (!world.isClient) {
                 //myGenes.setGenetics(myGenes.getGenetics());
             }
+            ItemStack itemStack_1 = playerEntity_1.getStackInHand(hand_1);
+            if (itemStack_1.getItem() == Initializer.SYRINGE_EMPTY && !playerEntity_1.abilities.creativeMode) {
+                e.damage(DamageSource.GENERIC, 0.5f);
+                itemStack_1.subtractAmount(1);
+                ItemStack newSyringe = new ItemStack(Initializer.SYRINGE_FULL);
+                ((IGeneSample)newSyringe.getItem()).setGenes(myGenes.getGenetics());
+                if (itemStack_1.isEmpty()) {
+                    playerEntity_1.setStackInHand(hand_1, newSyringe);
+                } else if (!playerEntity_1.inventory.insertStack(newSyringe)) {
+                    playerEntity_1.dropItem(newSyringe, false);
+                }
+
+                cir.setReturnValue(true);
+            }
         }
-        return false;
+        cir.setReturnValue(false);
     }
+
 }
