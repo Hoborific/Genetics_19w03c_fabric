@@ -57,7 +57,7 @@ public class PacketHandling {
             public void run() {
                 World wrld = player.world.getWorld();
                 Entity en = wrld.getEntityById(id);
-                int[] genes = ((IGeneticBase) en).getGeneticsForPacket();
+                int[] genes = ((IGeneticBase) en).getGenetics();
                 sendPacketToPlayer(craftGeneticPacket(id, genes), player.world, player.getPos());
             }
         };

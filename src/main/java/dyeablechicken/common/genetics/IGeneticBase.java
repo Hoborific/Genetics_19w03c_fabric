@@ -9,9 +9,11 @@ public interface IGeneticBase {
 
     void initializeGenetics();
 
+    void initializeGenetics(int[] mum, int[] dad);
+
     void setGeneticsFromPacket(int[] geneticarray);
 
-    int[] getGeneticsForPacket();
+    int[] getGenetics();
 
     int[] generateGenetics(@NotNull int[] parent1, @NotNull int[] parent2);
 

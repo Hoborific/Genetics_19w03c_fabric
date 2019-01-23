@@ -18,7 +18,7 @@ public class LayerDyeableFeatureRenderer extends FeatureRenderer<ChickenEntity, 
     {super(var1); }
 
     private DyeColor getColor(ChickenEntity entity) {
-        return DyeColor.byId(((IGeneticBase) entity).getGeneticsForPacket()[0]);
+        return DyeColor.byId(((IGeneticBase) entity).getGenetics()[0]);
     }
 
     @Override

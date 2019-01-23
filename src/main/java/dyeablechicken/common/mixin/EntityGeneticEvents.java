@@ -24,7 +24,7 @@ import static dyeablechicken.util.Logger.log;
 
 
 @Mixin(Entity.class)
-public class EntityEvents implements IGeneticBase {
+public class EntityGeneticEvents implements IGeneticBase {
     @Shadow
     public World world;
     Entity e = (Entity)(Object)this;
@@ -61,6 +61,15 @@ public class EntityEvents implements IGeneticBase {
     public void initializeGenetics() {
         if (!world.isClient) {
             myGenes.setGenetics(generateGenetics());
+            myGenes.hasGenetics = true;
+            //log("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
+        }
+    }
+
+    @Override
+    public void initializeGenetics(int[] mum, int[] dad) {
+        if (!world.isClient) {
+            myGenes.setGenetics(generateGenetics(mum, dad));
             myGenes.hasGenetics = true;
             //log("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
         }
@@ -112,7 +121,7 @@ public class EntityEvents implements IGeneticBase {
     }
 
     @Override
-    public int[] getGeneticsForPacket() {
+    public int[] getGenetics() {
         if (myGenes.getGenetics().length < 2) {
             System.out.println(" ERROR: ENTITY HAS NO GENETICS: " + myGenes.getEntityID() + " " + myGenes.getWorld().getEntityById(myGenes.getEntityID()).getClass().getCanonicalName());
             initializeGenetics();
@@ -127,10 +136,9 @@ public class EntityEvents implements IGeneticBase {
     @Inject(at = @At("RETURN"), method = "interact", cancellable = true)
     public boolean interact(PlayerEntity playerEntity_1, Hand hand_1, CallbackInfoReturnable cir) {
         if (e instanceof LivingEntity) {
-            log("Interacting. Genes: " + Arrays.toString(myGenes.getGenetics()));
-            log(Integer.toString(myGenes.getEntityID()));
+            log("Interacting with: " + myGenes.getEntityID() + " Genes: " + Arrays.toString(myGenes.getGenetics()));
             if (!world.isClient) {
-                myGenes.setGenetics(myGenes.getGenetics());
+                //myGenes.setGenetics(myGenes.getGenetics());
             }
         }
         return true;

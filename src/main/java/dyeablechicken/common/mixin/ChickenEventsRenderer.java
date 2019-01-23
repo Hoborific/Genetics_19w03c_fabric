@@ -15,6 +15,6 @@ public abstract class ChickenEventsRenderer{
 
     @Inject(at = @At("HEAD"), method = "getColor", cancellable = true)
     public DyeColor getColor(ChickenEntity entity, CallbackInfoReturnable ret) {
-        return DyeColor.byId(((IGeneticBase) entity).getGeneticsForPacket()[0]);
+        return DyeColor.byId(((IGeneticBase) entity).getGenetics()[0]);
     }
 }
