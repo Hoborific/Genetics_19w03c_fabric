@@ -14,12 +14,12 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
-public class RenderDyeableChicken extends MobEntityRenderer<MobEntity, EntityModel<MobEntity>> {//EntityMobRenderer<ChickenEntity,ChickenEntityModel<ChickenEntity>> {//EntityMobRenderer<ChickenEntity> {
+public class GeneticChickenRenderer extends MobEntityRenderer<MobEntity, EntityModel<MobEntity>> {//EntityMobRenderer<ChickenEntity,ChickenEntityModel<ChickenEntity>> {//EntityMobRenderer<ChickenEntity> {
     public static final Identifier CHICKEN_TEXTURE = new Identifier("dyeablechicken:textures/entity/dyeablechicken/chicken_base.png");//"dyeablechicken:textures/entity/dyeablechicken/chicken_base.png");//new ResourceLocation("textures/entity/chicken.png");
     public static final Identifier CHICKEN_LAYER_TEXTURE = new Identifier("dyeablechicken:textures/entity/dyeablechicken/chicken_coat.png");
 
 
-    public RenderDyeableChicken(EntityRenderDispatcher renderManagerIn, EntityRendererRegistry.Context context) {
+    public GeneticChickenRenderer(EntityRenderDispatcher renderManagerIn, EntityRendererRegistry.Context context) {
         super(renderManagerIn, new ChickenEntityModel<>(), 0.3f);
         this.addFeature(new LayerDyeableFeatureRenderer(this, CHICKEN_LAYER_TEXTURE));
         this.bindTexture(CHICKEN_TEXTURE);
