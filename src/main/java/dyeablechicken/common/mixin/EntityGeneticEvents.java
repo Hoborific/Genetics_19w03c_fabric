@@ -147,7 +147,6 @@ public class EntityGeneticEvents implements IGeneticBase {
             log("Interacting with: " + myGenes.getEntityID() + " Genes: " + Arrays.toString(myGenes.getGenetics()));
             if (!world.isClient) {
                 //myGenes.setGenetics(myGenes.getGenetics());
-            }
             ItemStack itemStack_1 = playerEntity_1.getStackInHand(hand_1);
             if (itemStack_1.getItem() == Initializer.SYRINGE_EMPTY && !playerEntity_1.abilities.creativeMode) {
                 e.damage(DamageSource.GENERIC, 0.5f);
@@ -162,6 +161,7 @@ public class EntityGeneticEvents implements IGeneticBase {
                 }
 
                 cir.setReturnValue(true);
+            }
             }
         }
         cir.setReturnValue(false);
