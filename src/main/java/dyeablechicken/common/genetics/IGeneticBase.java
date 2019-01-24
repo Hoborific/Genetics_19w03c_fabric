@@ -19,5 +19,7 @@ public interface IGeneticBase {
 
     int[] generateGenetics();
 
+    int getGeneticByIndex(int in);
+
     void setGeneticsInherited(int[] arr);
 }

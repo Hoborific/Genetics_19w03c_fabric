@@ -8,9 +8,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.Packet;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.world.World;
-import static dyeablechicken.util.Logger.*;
 
 import java.util.Arrays;
+
+import static dyeablechicken.util.Logger.debugLog;
 
 public class MyGenetics {
 
@@ -34,6 +35,14 @@ public class MyGenetics {
             debugLog("CALLED getGenetics on CLIENT");
         }
         return GENETIC_TRACKER;
+    }
+
+    public int getGeneticByIndex(int in) {
+        if (GENETIC_TRACKER.length >= in) {
+            return GENETIC_TRACKER[in];
+        } else {
+            return -1;
+        }
     }
 
     public World getWorld() {

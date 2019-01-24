@@ -114,6 +114,11 @@ public class EntityGeneticEvents implements IGeneticBase {
     }
 
     @Override
+    public int getGeneticByIndex(int in) {
+        return myGenes.getGeneticByIndex(in);
+    }
+
+    @Override
     public void setGeneticsInherited(int[] arr) {
         myGenes.setGenetics(arr);
     }

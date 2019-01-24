@@ -1,7 +1,7 @@
 package dyeablechicken;
 
-import dyeablechicken.client.GeneticChickenRenderer;
-import dyeablechicken.client.GeneticCowRenderer;
+import dyeablechicken.client.render.GeneticChickenRenderer;
+import dyeablechicken.client.render.GeneticCowRenderer;
 import dyeablechicken.init.Initializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.client.render.EntityRendererRegistry;

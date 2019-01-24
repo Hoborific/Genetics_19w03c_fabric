@@ -1,6 +1,7 @@
-package dyeablechicken.client;
+package dyeablechicken.client.render;
 
 
+import dyeablechicken.client.geneticRenderLogic.ChickenColorLogic;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.client.render.EntityRendererRegistry;
@@ -21,7 +22,7 @@ public class GeneticChickenRenderer extends MobEntityRenderer<MobEntity, EntityM
 
     public GeneticChickenRenderer(EntityRenderDispatcher renderManagerIn, EntityRendererRegistry.Context context) {
         super(renderManagerIn, new ChickenEntityModel<>(), 0.3f);
-        this.addFeature(new LayerDyeableFeatureRenderer(this, CHICKEN_LAYER_TEXTURE, 0));
+        this.addFeature(new LayerDyeableFeatureRenderer(this, CHICKEN_LAYER_TEXTURE, new ChickenColorLogic()));
         this.bindTexture(CHICKEN_TEXTURE);
     }
 

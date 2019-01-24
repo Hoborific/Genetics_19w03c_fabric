@@ -1,6 +1,8 @@
-package dyeablechicken.client;
+package dyeablechicken.client.render;
 
 
+import dyeablechicken.client.geneticRenderLogic.CowHideColorLogic;
+import dyeablechicken.client.geneticRenderLogic.CowSpotColorLogic;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.client.render.EntityRendererRegistry;
@@ -19,8 +21,8 @@ public class GeneticCowRenderer extends MobEntityRenderer<MobEntity, EntityModel
 
     public GeneticCowRenderer(EntityRenderDispatcher renderManagerIn, EntityRendererRegistry.Context context) {
         super(renderManagerIn, new CowEntityModel<>(), 0.3f);
-        this.addFeature(new LayerDyeableFeatureRenderer(this, COW_LAYER_1, 3));
-        this.addFeature(new LayerDyeableFeatureRenderer(this, COW_LAYER_2, 7));
+        this.addFeature(new LayerDyeableFeatureRenderer(this, COW_LAYER_1, new CowHideColorLogic(3)));
+        this.addFeature(new LayerDyeableFeatureRenderer(this, COW_LAYER_2, new CowSpotColorLogic(7)));
         this.bindTexture(COW_BASE);
     }
     @Override
