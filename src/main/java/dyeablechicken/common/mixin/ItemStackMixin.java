@@ -25,7 +25,7 @@ import static dyeablechicken.util.Logger.log;
 @Mixin(ItemStack.class)
 public class ItemStackMixin {
 
-    @Environment(EnvType.CLIENT)
+    /*@Environment(EnvType.CLIENT)
     @Inject(method = "getTooltipText", at = @At("RETURN"))
     public List<TextComponent> getTooltipText(PlayerEntity var1, TooltipOptions var2, CallbackInfoReturnable<List<TextComponent>> info) {
         Item stack = ((ItemStack) (Object) this).getItem();
@@ -42,5 +42,5 @@ public class ItemStackMixin {
             }
         }
         return info.getReturnValue();
-    }
+    }*/
 }

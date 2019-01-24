@@ -147,24 +147,24 @@ public class EntityGeneticEvents implements IGeneticBase {
             log("Interacting with: " + myGenes.getEntityID() + " Genes: " + Arrays.toString(myGenes.getGenetics()));
             if (!world.isClient) {
                 //myGenes.setGenetics(myGenes.getGenetics());
-            }
-            ItemStack itemStack_1 = playerEntity_1.getStackInHand(hand_1);
-            if (itemStack_1.getItem() == Initializer.SYRINGE_EMPTY && !playerEntity_1.abilities.creativeMode) {
-                e.damage(DamageSource.GENERIC, 0.5f);
-                itemStack_1.subtractAmount(1);
-                ItemStack newSyringe = new ItemStack(Initializer.SYRINGE_FULL);
-                ((IGeneSample)newSyringe.getItem()).setGenes(myGenes.getGenetics());
-                ((IGeneSample)newSyringe.getItem()).setEntityType(e.getName().getString());
-                if (itemStack_1.isEmpty()) {
-                    playerEntity_1.setStackInHand(hand_1, newSyringe);
-                } else if (!playerEntity_1.inventory.insertStack(newSyringe)) {
-                    playerEntity_1.dropItem(newSyringe, false);
+                ItemStack itemStack_1 = playerEntity_1.getStackInHand(hand_1);
+                if (itemStack_1.getItem() == Initializer.SYRINGE_EMPTY && !playerEntity_1.abilities.creativeMode) {
+                    e.damage(DamageSource.GENERIC, 0.5f);
+                    itemStack_1.subtractAmount(1);
+                    ItemStack newSyringe = new ItemStack(Initializer.SYRINGE_FULL);
+                    CompoundTag geneInfo = new CompoundTag();
+                    geneInfo.putString("dyeablechicken:entitytype", e.getName().getString());
+                    geneInfo.putIntArray("dyeablechicken:genes", ((IGeneticBase)e).getGenetics());
+                    newSyringe.setTag(geneInfo);
+                    if (itemStack_1.isEmpty()) {
+                        playerEntity_1.setStackInHand(hand_1, newSyringe);
+                    } else if (!playerEntity_1.inventory.insertStack(newSyringe)) {
+                        playerEntity_1.dropItem(newSyringe, false);
+                    }
+                    cir.setReturnValue(true);
                 }
-
-                cir.setReturnValue(true);
             }
         }
-        cir.setReturnValue(false);
     }
 
 }
