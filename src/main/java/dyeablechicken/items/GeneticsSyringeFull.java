@@ -1,20 +1,12 @@
 package dyeablechicken.items;
 
-import dyeablechicken.common.genetics.IGeneSample;
-import dyeablechicken.common.genetics.IGeneticBase;
-import dyeablechicken.common.genetics.MyGenetics;
 import net.minecraft.client.item.TooltipOptions;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.StringTextComponent;
 import net.minecraft.text.TextComponent;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
 import net.minecraft.world.World;
 
 import java.util.Arrays;

@@ -1,7 +1,6 @@
 package dyeablechicken.common.mixin;
 
 import com.sun.istack.internal.NotNull;
-import dyeablechicken.common.genetics.IGeneSample;
 import dyeablechicken.common.genetics.IGeneticBase;
 import dyeablechicken.common.genetics.MyGenetics;
 import dyeablechicken.init.Initializer;
