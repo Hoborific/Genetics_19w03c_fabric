@@ -28,6 +28,10 @@ public class BaseColorLogic extends ColorUtil implements IDontFuckingKnowRenameM
         return ((IGeneticBase) en).getGeneticByIndex(primaryGeneticIndex);
     }
 
+    public int getValueofSecondaryGene(Entity en) {
+        return ((IGeneticBase) en).getGeneticByIndex(secondaryGeneticIndex);
+    }
+
     public float[] geneticsToRGB(Entity en) {
         return SheepEntity.getRgbColor(DyeColor.byId((getValueOfPrimaryGene(en))));
     }

@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
@@ -31,8 +32,8 @@ import static dyeablechicken.util.Logger.log;
 public class EntityGeneticEvents implements IGeneticBase {
     @Shadow
     public World world;
-    Entity e = (Entity)(Object)this;
-    MyGenetics myGenes = new MyGenetics((Entity)(Object)this);
+    Entity e = (Entity) (Object) this;
+    MyGenetics myGenes = new MyGenetics((Entity) (Object) this);
 
 
     @Inject(at = @At("RETURN"), method = "toTag")
@@ -48,7 +49,11 @@ public class EntityGeneticEvents implements IGeneticBase {
     @Inject(at = @At("RETURN"), method = "<init>", cancellable = true)
     public void init(EntityType<?> entityType_1, World world_1, CallbackInfo ci) {
         if (e instanceof LivingEntity)
-            initializeGenetics();
+            if (e instanceof CowEntity) {
+                initializeCowGenetics();
+            } else {
+                initializeGenetics();
+            }
     }
 
     @Inject(at = @At("RETURN"), method = "fromTag", cancellable = true)
@@ -70,6 +75,31 @@ public class EntityGeneticEvents implements IGeneticBase {
             debugLog("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
         }
     }
+
+    public void initializeCowGenetics() { // this should be in an enum or something not seperate functions, tie this to the entity type somehow
+        if (!world.isClient) {
+            Random randy = new Random();
+            int[] newGenetics = new int[genomeSize];
+
+            for (int i = 0; i < genomeSize; i++) {
+                if (i == 3) { // third index is hide color right now
+                    int temp = randy.nextInt(3) + randy.nextInt(3) + randy.nextInt(4); // weighted towards less than 5 instead of random 0-9
+                    System.out.println(temp);
+                    if (temp <= 1) {
+                        temp = randy.nextInt(1); // 50% chance of zero (black)
+                    }
+                    newGenetics[i] = temp;
+                } else {
+                    newGenetics[i] = randy.nextInt(10);
+                }
+
+            }
+            myGenes.setGenetics(newGenetics);
+            myGenes.hasGenetics = true;
+            log("Initialized Cow Genetics: " + Arrays.toString(myGenes.getGenetics()));
+        }
+    }
+
 
     @Override
     public void initializeGenetics(int[] mum, int[] dad) {
