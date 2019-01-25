@@ -89,6 +89,10 @@ public class EntityGeneticEvents implements IGeneticBase {
                         temp = randy.nextInt(1); // 50% chance of zero (black)
                     }
                     newGenetics[i] = temp;
+                } else if (i == 7) {
+                    int temp = 2 + randy.nextInt(8);
+                    newGenetics[i] = temp;
+
                 } else {
                     newGenetics[i] = randy.nextInt(10);
                 }
