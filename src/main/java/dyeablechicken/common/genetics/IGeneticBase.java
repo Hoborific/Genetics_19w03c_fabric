@@ -1,25 +1,31 @@
 package dyeablechicken.common.genetics;
 
 import com.sun.istack.internal.NotNull;
+import dyeablechicken.Main;
+
+import java.util.List;
 
 public interface IGeneticBase {
-    int genomeSize = 10;
+    int genomeSize = Main.GENOMELENGTH;
+    int chromosomeSize = Main.CHROMOSOMELENGTH;
 
     int[] GENETIC_VALUES = null;
 
     void initializeGenetics();
 
-    void initializeGenetics(int[] mum, int[] dad);
+    void initializeGenetics(List<int[]> mum, List<int[]> dad);
 
     void setGeneticsFromPacket(int[] geneticarray);
 
     int[] getGenetics();
+    int[] getGenetics(int chromosome);
 
-    int[] generateGenetics(@NotNull int[] parent1, @NotNull int[] parent2);
+    List<int[]> generateGenetics(@NotNull List<int[]> parent1, @NotNull List<int[]> parent2);
 
-    int[] generateGenetics();
+    List<int[]> generateGenetics();
 
-    int getGeneticByIndex(int in);
+    int getGeneticsByIndex(int in);
+    int getGeneticsByIndex(int chromosome, int in);
 
     void setGeneticsInherited(int[] arr);
 }

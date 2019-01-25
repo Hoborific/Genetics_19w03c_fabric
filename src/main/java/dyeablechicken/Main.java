@@ -14,7 +14,8 @@ import static dyeablechicken.common.net.PacketHandling.*;
 public class Main implements ModInitializer {
 
 	public static final String MODID = "dyeablechicken";
-
+	public static final int GENOMELENGTH = 6;
+	public static final int CHROMOSOMELENGTH = 10;
 
 
 	@Override

@@ -1,6 +1,7 @@
 package dyeablechicken.common.mixin;
 
 import com.sun.istack.internal.NotNull;
+import dyeablechicken.Main;
 import dyeablechicken.common.genetics.IGeneticBase;
 import dyeablechicken.common.genetics.MyGenetics;
 import dyeablechicken.init.Initializer;
@@ -21,7 +22,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static dyeablechicken.util.Logger.debugLog;
@@ -60,8 +63,9 @@ public class EntityGeneticEvents implements IGeneticBase {
     public void fromTag(CompoundTag tag, CallbackInfo ci) {
         if (e instanceof LivingEntity)
             if (!world.isClient) {
-
-                myGenes.setGenetics(tag.getIntArray("dyeablechicken:genes"));
+                for (int i = 0; i < Main.GENOMELENGTH; i++) {
+                    myGenes.setGenetics(tag.getIntArray("dyeablechicken:genes" + i));
+                }
                 myGenes.hasGenetics = tag.getBoolean("dyeablechicken:hasGenetics");
                 debugLog("Loaded from tag Genetics " + Arrays.toString(myGenes.getGenetics()));
             }
@@ -71,6 +75,15 @@ public class EntityGeneticEvents implements IGeneticBase {
     public void initializeGenetics() {
         if (!world.isClient) {
             myGenes.setGenetics(generateGenetics());
+            myGenes.hasGenetics = true;
+            debugLog("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
+        }
+    }
+
+    @Override
+    public void initializeGenetics(List<int[]> mum, List<int[]> dad) {
+        if (!world.isClient) {
+            myGenes.setGenetics(generateGenetics(mum, dad));
             myGenes.hasGenetics = true;
             debugLog("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
         }
@@ -100,52 +113,52 @@ public class EntityGeneticEvents implements IGeneticBase {
         }
     }
 
-
     @Override
-    public void initializeGenetics(int[] mum, int[] dad) {
-        if (!world.isClient) {
-            myGenes.setGenetics(generateGenetics(mum, dad));
-            myGenes.hasGenetics = true;
-            debugLog("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
-        }
-    }
-
-    @Override
-    public int[] generateGenetics(@NotNull int[] parent1, @NotNull int[] parent2) {
-        int[] newGenetics = new int[genomeSize];
-
-        if ((parent1.length < genomeSize) || (parent2.length < genomeSize)) {
-            log("generateGenetics(int[], int[]) was passed arrays shorter than genomeSize, generating new random values.");
-            return generateGenetics();
-        }
+    public List<int[]> generateGenetics(@NotNull List<int[]> parent1, @NotNull List<int[]> parent2) {
+        List<int[]> newGenetics = new ArrayList<int[]>();
 
         for (int i = 0; i < genomeSize; i++) {
             Random randy = new Random();
+            int[] temp = new int[chromosomeSize];
 
-            if (randy.nextBoolean())
-                newGenetics[i] = parent1[i];
-            else
-                newGenetics[i] = parent2[i];
+            for (int j = 0; j < chromosomeSize; j++) {
+                if (randy.nextBoolean())
+                    temp[j] = parent1.get(i)[j];
+                else
+                    temp[j] = parent2.get(i)[j];
+            }
+
+            newGenetics.add(temp);
         }
 
         return newGenetics;
     }
 
     @Override
-    public int[] generateGenetics() {
+    public List<int[]> generateGenetics() {
         Random randy = new Random();
-        int[] newGenetics = new int[genomeSize];
+        List<int[]> newGenetics = new ArrayList<int[]>();
 
         for (int i = 0; i < genomeSize; i++) {
-            newGenetics[i] = randy.nextInt(10);
-        }
+            int[] temp = new int[genomeSize];
 
+            for (int j = 0; j < genomeSize; j++) {
+                temp[i] = randy.nextInt(10);
+            }
+
+            newGenetics.add(temp);
+        }
         return newGenetics;
     }
 
     @Override
-    public int getGeneticByIndex(int in) {
-        return myGenes.getGeneticByIndex(in);
+    public int getGeneticsByIndex(int in) {
+        return myGenes.getGeneticsByIndex(in);
+    }
+
+    @Override
+    public int getGeneticsByIndex(int chromosome, int in) {
+        return myGenes.getGeneticsByIndex(chromosome, in);
     }
 
     @Override
@@ -171,6 +184,11 @@ public class EntityGeneticEvents implements IGeneticBase {
             }
         }
         return myGenes.getGenetics();
+    }
+
+    @Override
+    public int[] getGenetics(int chromosome) {
+        return new int[0];
     }
 
     // Following function interferes with interaction behavior
