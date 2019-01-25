@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.SheepEntity;
 import net.minecraft.util.DyeColor;
 
-public class BaseColorLogic extends ColorUtil implements IDontFuckingKnowRenameMe {
+public class BaseColorLogic extends ColorUtil implements IFuckingRenamedIt {
 
     int primaryGeneticIndex = 0;
     int secondaryGeneticIndex = 1;

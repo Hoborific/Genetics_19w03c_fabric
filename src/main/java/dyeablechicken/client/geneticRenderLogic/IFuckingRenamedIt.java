@@ -2,6 +2,6 @@ package dyeablechicken.client.geneticRenderLogic;
 
 import net.minecraft.entity.Entity;
 
-public interface IDontFuckingKnowRenameMe {
+public interface IFuckingRenamedIt {
     float[] geneticsToRGB(Entity en);
 }

@@ -1,7 +1,7 @@
 package dyeablechicken.client.render;
 
 import com.mojang.blaze3d.platform.GlStateManager;
-import dyeablechicken.client.geneticRenderLogic.IDontFuckingKnowRenameMe;
+import dyeablechicken.client.geneticRenderLogic.IFuckingRenamedIt;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.EntityModel;
@@ -12,9 +12,9 @@ import net.minecraft.util.Identifier;
 public class LayerDyeableFeatureRenderer extends FeatureRenderer<MobEntity, EntityModel<MobEntity>> {
     private final EntityModel<MobEntity> myModel;
     private final Identifier LAYER_TEXTURES;
-    private IDontFuckingKnowRenameMe myColorLogic;
+    private IFuckingRenamedIt myColorLogic;
 
-    LayerDyeableFeatureRenderer(FeatureRendererContext<MobEntity, EntityModel<MobEntity>> var1, Identifier texture, IDontFuckingKnowRenameMe whogivesahsit) {
+    LayerDyeableFeatureRenderer(FeatureRendererContext<MobEntity, EntityModel<MobEntity>> var1, Identifier texture, IFuckingRenamedIt whogivesahsit) {
         super(var1);
         myModel = var1.getModel();
         LAYER_TEXTURES = texture;
