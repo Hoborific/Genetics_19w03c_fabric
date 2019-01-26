@@ -50,6 +50,8 @@ public interface IGenetics {
     public void setGenes(int[] newGenes, int chromosome, boolean isFather);
     public void setGenes(int newGene, int chromosome, int position, boolean isFather);
 
+    public void setGenesFromPacket(List<int[]> newGenes);
+
 
     // Overloading everywhere. You get an overload and you get an overload and
     // The following are the cases for needing to generate genes:
@@ -70,6 +72,11 @@ public interface IGenetics {
     public boolean getHasGenes();
     public void setHasParents(int parent1, int parent2);
     public int getParent(boolean isFather);
+    public void setHasGenes(boolean bool);
 
+
+    // Updates the information, client-server talk, etc.
+
+    public void updateGenes();
 
 }

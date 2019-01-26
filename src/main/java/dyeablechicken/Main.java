@@ -24,8 +24,8 @@ public class Main implements ModInitializer {
 		EntityRendererRegistry.INSTANCE.register(ChickenEntity.class, GeneticChickenRenderer::new);
 		EntityRendererRegistry.INSTANCE.register(CowEntity.class, GeneticCowRenderer::new);
 
-		CustomPayloadPacketRegistry.CLIENT.register(GENETIC_SYNC_PACKET, SYNC_PACKET_CONSUMER);
-		CustomPayloadPacketRegistry.SERVER.register(GENETIC_REQUEST_PACKET, REQUEST_PACKET_CONSUMER);
+		CustomPayloadPacketRegistry.CLIENT.register(GENOME_SYNC_PACKET, GENOME_SYNC_PACKET_CONSUMER);
+		CustomPayloadPacketRegistry.SERVER.register(GENOME_REQUEST_PACKET, GENOME_REQUEST_PACKET_CONSUMER);
 
         Initializer.init();
 	}

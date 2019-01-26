@@ -1,6 +1,6 @@
 package dyeablechicken.client.geneticRenderLogic;
 
-import dyeablechicken.common.genetics.IGeneticBase;
+import dyeablechicken.common.genetics.IGenetics;
 import dyeablechicken.util.ColorUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.SheepEntity;
@@ -25,11 +25,11 @@ public class BaseColorLogic extends ColorUtil implements IFuckingRenamedIt {
     }
 
     public int getValueOfPrimaryGene(Entity en) {
-        return ((IGeneticBase) en).getGeneticByIndex(primaryGeneticIndex);
+        return ((IGenetics) en).getGenes(0, primaryGeneticIndex);
     }
 
     public int getValueofSecondaryGene(Entity en) {
-        return ((IGeneticBase) en).getGeneticByIndex(secondaryGeneticIndex);
+        return ((IGenetics) en).getGenes(0, secondaryGeneticIndex);
     }
 
     public float[] geneticsToRGB(Entity en) {

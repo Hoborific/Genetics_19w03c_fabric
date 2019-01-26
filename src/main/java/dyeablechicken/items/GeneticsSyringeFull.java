@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import java.util.Arrays;
 import java.util.List;
 
+import static dyeablechicken.common.genetics.IGenetics.genomeSize;
 import static dyeablechicken.util.Logger.*;
 
 public class GeneticsSyringeFull extends GeneticsBaseItem {
@@ -32,10 +33,22 @@ public class GeneticsSyringeFull extends GeneticsBaseItem {
         if (world_1 != null) {
             if (itemStack_1.hasTag()) {
                 list_1.add(new StringTextComponent(("Animal Type: " + itemStack_1.getTag().getString("dyeablechicken:entitytype"))));
-                list_1.add(new StringTextComponent(("Genes: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:genes")))));
+
+                list_1.add(new StringTextComponent("Chromosome 0, Paternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:paternalGene0"))));
+                list_1.add(new StringTextComponent("Chromosome 1, Paternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:paternalGene1"))));
+                list_1.add(new StringTextComponent("Chromosome 2, Paternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:paternalGene2"))));
+                list_1.add(new StringTextComponent("Chromosome 3, Paternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:paternalGene3"))));
+                list_1.add(new StringTextComponent("Chromosome 4, Paternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:paternalGene4"))));
+                list_1.add(new StringTextComponent("Chromosome 5, Paternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:paternalGene5"))));
+
+                list_1.add(new StringTextComponent("Chromosome 0, Maternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:maternalGene0"))));
+                list_1.add(new StringTextComponent("Chromosome 1, Maternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:maternalGene1"))));
+                list_1.add(new StringTextComponent("Chromosome 2, Maternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:maternalGene2"))));
+                list_1.add(new StringTextComponent("Chromosome 3, Maternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:maternalGene3"))));
+                list_1.add(new StringTextComponent("Chromosome 4, Maternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:maternalGene4"))));
+                list_1.add(new StringTextComponent("Chromosome 5, Maternal: " + Arrays.toString(itemStack_1.getTag().getIntArray("dyeablechicken:maternalGene5"))));
+                }
             } else
                 list_1.add(new StringTextComponent("Empty Syringe"));
         }
     }
-
-}

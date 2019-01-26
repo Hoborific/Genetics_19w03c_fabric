@@ -1,6 +1,6 @@
 package dyeablechicken.common.mixin;
 
-import dyeablechicken.common.genetics.IGeneticBase;
+import dyeablechicken.common.genetics.IGenetics;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.passive.*;
@@ -9,9 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Arrays;
-
-import static dyeablechicken.util.Logger.log;
+import static dyeablechicken.util.Logger.debugLog;
 
 
 @Mixin({
@@ -31,10 +29,8 @@ public class GenericEntityMixin {
 
         if (!e.world.isClient) {
             /* idk deliver babies or whatever */
-            int[] parent1 = ((IGeneticBase) e).getGenetics();
-            int[] parent2 = ((IGeneticBase) passiveEntity).getGenetics();
-            ((IGeneticBase) child).initializeGenetics(parent1, parent2);
-            log("Child genetics applied: mum " + Arrays.toString(parent1) + " dad: " + Arrays.toString(parent2) + " this: " + Arrays.toString(((IGeneticBase) child).getGenetics()));
+            ((IGenetics) child).generateGenes(e, passiveEntity);
+            debugLog("Set Geneties for Child Entity");
         }
         cir.setReturnValue(child); // if child is a new instance
     }

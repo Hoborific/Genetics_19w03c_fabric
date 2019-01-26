@@ -1,11 +1,18 @@
 package dyeablechicken.common.genetics;
 
 import dyeablechicken.Main;
+import dyeablechicken.common.net.PacketHandling;
 import net.minecraft.entity.Entity;
+import net.minecraft.network.Packet;
+import net.minecraft.text.StringTextComponent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import static dyeablechicken.util.Logger.debugLog;
+import static dyeablechicken.util.Logger.log;
 
 public class Genome implements IGenetics {
 
@@ -112,9 +119,9 @@ public class Genome implements IGenetics {
     public int getGenes(int index, int position, boolean isFather) {
 
         if (isFather)
-            return paternalGenes.get(index)[position];
+            return (paternalGenes.get(index))[position];
         else
-            return maternalGenes.get(index)[position];
+            return (maternalGenes.get(index))[position];
 
     }
 
@@ -159,6 +166,7 @@ public class Genome implements IGenetics {
             maternalGenes.set(i,newGenes.get(i + genomeSize));
         }
 
+        updateGenes();
     }
 
 
@@ -172,6 +180,7 @@ public class Genome implements IGenetics {
         else
             maternalGenes = newGenes;
 
+        updateGenes();
     }
 
 
@@ -185,6 +194,7 @@ public class Genome implements IGenetics {
         else
             maternalGenes.set(chromosome, newGenes);
 
+        updateGenes();
     }
 
 
@@ -198,6 +208,20 @@ public class Genome implements IGenetics {
         else
             maternalGenes.get(chromosome)[position] = newGene;
 
+        updateGenes();
+    }
+
+
+    // Sets genes from packet; does not cause a packet to be sent to request sync (as that'd be a silly loop)
+
+    @Override
+    public void setGenesFromPacket(List<int[]> newGenes) {
+
+        for(int i = 0; i < genomeSize; i++) {
+            paternalGenes.set(i,newGenes.get(i));
+            maternalGenes.set(i,newGenes.get(i + genomeSize));
+        }
+
     }
 
 
@@ -208,16 +232,13 @@ public class Genome implements IGenetics {
         List<int[]> tempMotherList = new ArrayList<int[]>();
         List<int[]> tempFatherList = new ArrayList<int[]>();
 
+        log("Generating fresh genes, entity " + myself.getEntityId());
+
         for (int i = 0; i < genomeSize; i++) {
             Random randy = new Random();
 
-            int[] tempMother = new int[chromosomeSize];
-            int[] tempFather = new int[chromosomeSize];
-
-            for (int j = 0; j < genomeSize; j++) {
-                tempFather[j] = randy.nextInt(10);
-                tempMother[j] = randy.nextInt(10);
-            }
+            int[] tempMother = {randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10)};
+            int[] tempFather = {randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10), randy.nextInt(10)};
 
             tempFatherList.add(tempFather);
             tempMotherList.add(tempMother);
@@ -225,6 +246,8 @@ public class Genome implements IGenetics {
 
         setGenes(tempFatherList, true);
         setGenes(tempMotherList, false);
+
+        setHasGenes(true);
 
     }
 
@@ -235,6 +258,8 @@ public class Genome implements IGenetics {
     public void generateGenes(Entity fatherEntity, Entity motherEntity) {
         setGenes(((IGenetics)fatherEntity).generateHaploidGenes(), true);
         setGenes(((IGenetics)motherEntity).generateHaploidGenes(), false);
+
+        setHasGenes(true);
     }
 
 
@@ -309,7 +334,7 @@ public class Genome implements IGenetics {
 
     @Override
     public boolean getHasGenes() {
-        return (paternalGenes.isEmpty() ? false : true);
+        return hasGenetics;
     }
 
 
@@ -325,6 +350,29 @@ public class Genome implements IGenetics {
     @Override
     public int getParent(boolean isFather) {
         return (isFather ? fatherID : motherID);
+    }
+
+    @Override
+    public void setHasGenes(boolean bool) {
+        hasGenetics = bool;
+    }
+
+    // Handles display name and server->client
+
+    @Override
+    public void updateGenes() {
+
+        if (myself.getEntityWorld().isClient) {
+            debugLog("Setting Genes as Client");
+            myself.setCustomName(new StringTextComponent(Arrays.toString(getGenes())));
+            myself.setCustomNameVisible(true);
+        }
+        else {
+            debugLog("Setting Genes as Server, Sending Gene Packet");
+            Packet pacman = PacketHandling.craftGenomePacket(myself.getEntityId(), getGenome());
+            PacketHandling.sendPacketToPlayer(pacman, myself.world, myself.getPos());
+        }
+
     }
 
 }

@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static dyeablechicken.common.net.PacketHandling.craftGeneticRequestPacket;
+import static dyeablechicken.common.net.PacketHandling.craftGenomeRequestPacket;
 
 @Mixin(World.class)
 public class WorldEvents {
@@ -18,7 +19,7 @@ public class WorldEvents {
     protected void onEntityAdded(Entity en, CallbackInfo ci) {
         if (en instanceof LivingEntity)
             if (en.world.isClient) {
-                Packet pak = craftGeneticRequestPacket(en.getEntityId());
+                Packet pak = craftGenomeRequestPacket(en.getEntityId());
                 en.world.sendPacket(pak);
             }
     }

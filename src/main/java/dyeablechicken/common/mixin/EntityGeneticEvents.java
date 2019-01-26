@@ -1,9 +1,7 @@
 package dyeablechicken.common.mixin;
 
-import com.sun.istack.internal.NotNull;
-import dyeablechicken.Main;
-import dyeablechicken.common.genetics.IGeneticBase;
-import dyeablechicken.common.genetics.MyGenetics;
+import dyeablechicken.common.genetics.Genome;
+import dyeablechicken.common.genetics.IGenetics;
 import dyeablechicken.init.Initializer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -22,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.ArrayList;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -32,26 +30,38 @@ import static dyeablechicken.util.Logger.log;
 
 
 @Mixin(Entity.class)
-public class EntityGeneticEvents implements IGeneticBase {
+public class EntityGeneticEvents implements IGenetics {
     @Shadow
     public World world;
     Entity e = (Entity) (Object) this;
-    MyGenetics myGenes = new MyGenetics((Entity) (Object) this);
+    Genome myGenes = new Genome((Entity) (Object) this);
 
 
     @Inject(at = @At("RETURN"), method = "toTag")
     public void toTag(CompoundTag tag, CallbackInfoReturnable cir) {
         if (e instanceof LivingEntity)
             if (!world.isClient) {
-                tag.putIntArray("dyeablechicken:genes", myGenes.getGenetics());
-                tag.putBoolean("dyeablechicken:hasGenetics", myGenes.hasGenetics);
-                debugLog("Saved to tag Genetics " + Arrays.toString(myGenes.getGenetics()));
+                tag.putBoolean("dyeablechicken:hasgenes", myGenes.getHasGenes());
+                tag.putIntArray("dyeablechicken:paternalGene0", myGenes.getGenes(0,true));
+                tag.putIntArray("dyeablechicken:paternalGene1", myGenes.getGenes(1,true));
+                tag.putIntArray("dyeablechicken:paternalGene2", myGenes.getGenes(2,true));
+                tag.putIntArray("dyeablechicken:paternalGene3", myGenes.getGenes(3,true));
+                tag.putIntArray("dyeablechicken:paternalGene4", myGenes.getGenes(4,true));
+                tag.putIntArray("dyeablechicken:paternalGene5", myGenes.getGenes(5,true));
+                tag.putIntArray("dyeablechicken:maternalGene0", myGenes.getGenes(0,false));
+                tag.putIntArray("dyeablechicken:maternalGene1", myGenes.getGenes(1,false));
+                tag.putIntArray("dyeablechicken:maternalGene2", myGenes.getGenes(2,false));
+                tag.putIntArray("dyeablechicken:maternalGene3", myGenes.getGenes(3,false));
+                tag.putIntArray("dyeablechicken:maternalGene4", myGenes.getGenes(4,false));
+                tag.putIntArray("dyeablechicken:maternalGene5", myGenes.getGenes(5,false));
+                debugLog("Saved Genetics to tag for Entity " + e.getEntityId());
             }
     }
 
     @Inject(at = @At("RETURN"), method = "<init>", cancellable = true)
     public void init(EntityType<?> entityType_1, World world_1, CallbackInfo ci) {
         if (e instanceof LivingEntity)
+
             if (e instanceof CowEntity) {
                 initializeCowGenetics();
             } else {
@@ -63,132 +73,71 @@ public class EntityGeneticEvents implements IGeneticBase {
     public void fromTag(CompoundTag tag, CallbackInfo ci) {
         if (e instanceof LivingEntity)
             if (!world.isClient) {
-                for (int i = 0; i < Main.GENOMELENGTH; i++) {
-                    myGenes.setGenetics(tag.getIntArray("dyeablechicken:genes" + i));
-                }
-                myGenes.hasGenetics = tag.getBoolean("dyeablechicken:hasGenetics");
-                debugLog("Loaded from tag Genetics " + Arrays.toString(myGenes.getGenetics()));
+                myGenes.setHasGenes(tag.getBoolean("dyeablechicken:hasgenes"));
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:paternalGene0"), 0, true);
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:paternalGene1"), 1, true);
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:paternalGene2"), 2, true);
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:paternalGene3"), 3, true);
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:paternalGene4"), 4, true);
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:paternalGene5"), 5, true);
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:maternalGene0"), 0, false);
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:maternalGene1"), 1, false);
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:maternalGene2"), 2, false);
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:maternalGene3"), 3, false);
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:maternalGene4"), 4, false);
+                myGenes.setGenes(tag.getIntArray("dyeablechicken:maternalGene5"), 5, false);
+
+                debugLog("Loaded Genes from tag for Entity " + e.getEntityId());
             }
     }
 
-    @Override
     public void initializeGenetics() {
         if (!world.isClient) {
-            myGenes.setGenetics(generateGenetics());
-            myGenes.hasGenetics = true;
-            debugLog("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
-        }
-    }
-
-    @Override
-    public void initializeGenetics(List<int[]> mum, List<int[]> dad) {
-        if (!world.isClient) {
-            myGenes.setGenetics(generateGenetics(mum, dad));
-            myGenes.hasGenetics = true;
-            debugLog("Initialized Genetics: " + Arrays.toString(myGenes.getGenetics()));
+            if (e instanceof LivingEntity) {
+                debugLog("Initializing Genetics for Entity " + e.getEntityId());
+                if (myGenes.getHasGenes() == false) {
+                    debugLog("Generating Genetics for Entity " + e.getEntityId());
+                    myGenes.generateGenes();
+                } else
+                    debugLog("Genetics for Entity " + e.getEntityId() + " already generated");
+            }
         }
     }
 
     public void initializeCowGenetics() { // this should be in an enum or something not seperate functions, tie this to the entity type somehow
         if (!world.isClient) {
-            Random randy = new Random();
-            int[] newGenetics = new int[genomeSize];
+            if (myGenes.getHasGenes() == false) {
+                myGenes.generateGenes();
+                Random randy = new Random();
+                int[] tempArray = new int[chromosomeSize];
 
-            for (int i = 0; i < genomeSize; i++) {
-                if (i == 3) { // third index is hide color right now
+                for (int i=0; i < chromosomeSize; i++) {
                     int temp = randy.nextInt(3) + randy.nextInt(3) + randy.nextInt(4); // weighted towards less than 5 instead of random 0-9
-                    System.out.println(temp);
+
                     if (temp <= 1) {
-                        temp = randy.nextInt(1); // 50% chance of zero (black)
+                        temp = randy.nextInt(1);
                     }
-                    newGenetics[i] = temp;
-                } else {
-                    newGenetics[i] = randy.nextInt(10);
+
+                    tempArray[i] = temp;
                 }
 
-            }
-            myGenes.setGenetics(newGenetics);
-            myGenes.hasGenetics = true;
-            log("Initialized Cow Genetics: " + Arrays.toString(myGenes.getGenetics()));
-        }
-    }
+                myGenes.setGenes(tempArray,0,true);
 
-    @Override
-    public List<int[]> generateGenetics(@NotNull List<int[]> parent1, @NotNull List<int[]> parent2) {
-        List<int[]> newGenetics = new ArrayList<int[]>();
+                for (int i=0; i < chromosomeSize; i++) {
+                    int temp = randy.nextInt(3) + randy.nextInt(3) + randy.nextInt(4); // weighted towards less than 5 instead of random 0-9
 
-        for (int i = 0; i < genomeSize; i++) {
-            Random randy = new Random();
-            int[] temp = new int[chromosomeSize];
+                    if (temp <= 1) {
+                        temp = randy.nextInt(1);
+                    }
 
-            for (int j = 0; j < chromosomeSize; j++) {
-                if (randy.nextBoolean())
-                    temp[j] = parent1.get(i)[j];
-                else
-                    temp[j] = parent2.get(i)[j];
+                    tempArray[i] = temp;
+                }
+
+                myGenes.setGenes(tempArray,0,false);
             }
 
-            newGenetics.add(temp);
+            log("Initialized Cow Genetics for Entity " + e.getEntityId());
         }
-
-        return newGenetics;
-    }
-
-    @Override
-    public List<int[]> generateGenetics() {
-        Random randy = new Random();
-        List<int[]> newGenetics = new ArrayList<int[]>();
-
-        for (int i = 0; i < genomeSize; i++) {
-            int[] temp = new int[genomeSize];
-
-            for (int j = 0; j < genomeSize; j++) {
-                temp[i] = randy.nextInt(10);
-            }
-
-            newGenetics.add(temp);
-        }
-        return newGenetics;
-    }
-
-    @Override
-    public int getGeneticsByIndex(int in) {
-        return myGenes.getGeneticsByIndex(in);
-    }
-
-    @Override
-    public int getGeneticsByIndex(int chromosome, int in) {
-        return myGenes.getGeneticsByIndex(chromosome, in);
-    }
-
-    @Override
-    public void setGeneticsInherited(int[] arr) {
-        myGenes.setGenetics(arr);
-    }
-
-
-    @Override
-    public void setGeneticsFromPacket(int[] geneticarray) {
-        debugLog("got genetics from packet ID: " + myGenes.getEntityID() + " " + Arrays.toString(geneticarray));
-        this.myGenes.setGenetics(geneticarray);
-    }
-
-    @Override
-    public int[] getGenetics() {
-        if (myGenes.getGenetics().length < 2) {
-            log("ERROR: ENTITY HAS NO GENETICS: " + myGenes.getEntityID() + " " + myGenes.getWorld().getEntityById(myGenes.getEntityID()).getClass().getCanonicalName());
-            initializeGenetics();
-            if (myGenes.getGenetics().length < 2) {
-                log("ERROR: ENTITY STILL HAS NO GENETICS: " + myGenes.getEntityID() + " " + myGenes.getWorld().getEntityById(myGenes.getEntityID()).getClass().getCanonicalName());
-                return new int[]{-1, -1, -1, -1, -1, -1, -1, -1, -1, -1};
-            }
-        }
-        return myGenes.getGenetics();
-    }
-
-    @Override
-    public int[] getGenetics(int chromosome) {
-        return new int[0];
     }
 
     // Following function interferes with interaction behavior
@@ -196,17 +145,51 @@ public class EntityGeneticEvents implements IGeneticBase {
     @Inject(at = @At("RETURN"), method = "interact", cancellable = true)
     public void interact(PlayerEntity playerEntity_1, Hand hand_1, CallbackInfoReturnable cir) {
         if (e instanceof LivingEntity) {
-            log("Interacting with: " + myGenes.getEntityID() + " Genes: " + Arrays.toString(myGenes.getGenetics()));
+            StringBuilder logText = new StringBuilder();
+
+            logText.append("Interacting with: " + e.getEntityId() + ", Genes: \n");
+            logText.append("Has Genes: " + (myGenes.getHasGenes() ? "True" : "False"));
+
+            for(int i=0; i < genomeSize; i++) {
+                logText.append("Chromosome "+ i +", Paternal: " + Arrays.toString(myGenes.getGenes(i,true)) + "\n");
+                logText.append("Chromosome "+ i +", Maternal: " + Arrays.toString(myGenes.getGenes(i,false)) + "\n");
+            }
+
+            logText.append("End Report.");
+
+            log(logText.toString());
+
             if (!world.isClient) {
-                //myGenes.setGenetics(myGenes.getGenetics());
                 ItemStack itemStack_1 = playerEntity_1.getStackInHand(hand_1);
                 if (itemStack_1.getItem() == Initializer.SYRINGE_EMPTY && !playerEntity_1.abilities.creativeMode) {
                     e.damage(DamageSource.GENERIC, 0.5f);
                     itemStack_1.subtractAmount(1);
                     ItemStack newSyringe = new ItemStack(Initializer.SYRINGE_FULL);
                     CompoundTag geneInfo = new CompoundTag();
+
                     geneInfo.putString("dyeablechicken:entitytype", e.getName().getString());
-                    geneInfo.putIntArray("dyeablechicken:genes", ((IGeneticBase)e).getGenetics());
+                    log("Setting entitytype to " + e.getName().getString());
+
+                    geneInfo.putIntArray("dyeablechicken:paternalGene0", myGenes.getGenes(0,true));
+                    log("Setting paternalGene0 to" + myGenes.getGenes(0,true));
+                    geneInfo.putIntArray("dyeablechicken:paternalGene1", myGenes.getGenes(1,true));
+                    log("Setting paternalGene1 to" + myGenes.getGenes(1,true));
+                    geneInfo.putIntArray("dyeablechicken:paternalGene2", myGenes.getGenes(2,true));
+                    log("Setting paternalGene2 to" + myGenes.getGenes(2,true));
+                    geneInfo.putIntArray("dyeablechicken:paternalGene3", myGenes.getGenes(3,true));
+                    log("Setting paternalGene3 to" + myGenes.getGenes(3,true));
+                    geneInfo.putIntArray("dyeablechicken:paternalGene4", myGenes.getGenes(4,true));
+                    log("Setting paternalGene4 to" + myGenes.getGenes(4,true));
+                    geneInfo.putIntArray("dyeablechicken:paternalGene5", myGenes.getGenes(5,true));
+                    log("Setting paternalGene5 to" + myGenes.getGenes(5,true));
+
+                    geneInfo.putIntArray("dyeablechicken:maternalGene0", myGenes.getGenes(0,false));
+                    geneInfo.putIntArray("dyeablechicken:maternalGene1", myGenes.getGenes(1,false));
+                    geneInfo.putIntArray("dyeablechicken:maternalGene2", myGenes.getGenes(2,false));
+                    geneInfo.putIntArray("dyeablechicken:maternalGene3", myGenes.getGenes(3,false));
+                    geneInfo.putIntArray("dyeablechicken:maternalGene4", myGenes.getGenes(4,false));
+                    geneInfo.putIntArray("dyeablechicken:maternalGene5", myGenes.getGenes(5,false));
+
                     newSyringe.setTag(geneInfo);
                     if (itemStack_1.isEmpty()) {
                         playerEntity_1.setStackInHand(hand_1, newSyringe);
@@ -217,6 +200,116 @@ public class EntityGeneticEvents implements IGeneticBase {
                 }
             }
         }
+    }
+
+    @Override
+    public int[] getGenes() {
+        return myGenes.getGenes();
+    }
+
+    @Override
+    public int[] getGenes(int index) {
+        return myGenes.getGenes(index);
+    }
+
+    @Override
+    public int[] getGenes(int index, boolean isFather) {
+        return myGenes.getGenes(index, isFather);
+    }
+
+    @Override
+    public int getGenes(int index, int position) {
+        return myGenes.getGenes(index, position);
+    }
+
+    @Override
+    public int getGenes(int index, int position, boolean isFather) {
+        return myGenes.getGenes(index, position, isFather);
+    }
+
+    @Override
+    public List<int[]> getGenome() {
+        return myGenes.getGenome();
+    }
+
+    @Override
+    public List<int[]> getGenome(boolean isFather) {
+        return myGenes.getGenome(isFather);
+    }
+
+    @Override
+    public void setGenes(List<int[]> newGenes) {
+        myGenes.setGenes(newGenes);
+    }
+
+    @Override
+    public void setGenes(List<int[]> newGenes, boolean isFather) {
+        myGenes.setGenes(newGenes, isFather);
+    }
+
+    @Override
+    public void setGenes(int[] newGenes, int chromosome, boolean isFather) {
+        myGenes.setGenes(newGenes, chromosome, isFather);
+    }
+
+    @Override
+    public void setGenes(int newGene, int chromosome, int position, boolean isFather) {
+        myGenes.setGenes(newGene, chromosome, position, isFather);
+    }
+
+    @Override
+    public void setGenesFromPacket(List<int[]> newGenes) {
+        myGenes.setGenesFromPacket(newGenes);
+    }
+
+    @Override
+    public void generateGenes() {
+        myGenes.generateGenes();
+    }
+
+    @Override
+    public void generateGenes(Entity fatherEntity, Entity motherEntity) {
+        myGenes.generateGenes(fatherEntity, motherEntity);
+    }
+
+    @Override
+    public void generateGenes(List<int[]> fatherGenes, List<int[]> motherGenes) {
+        myGenes.generateGenes(fatherGenes, motherGenes);
+    }
+
+    @Override
+    public List<int[]> generateHaploidGenes() {
+        return myGenes.generateHaploidGenes();
+    }
+
+    @Override
+    public boolean getHasParents() {
+        return myGenes.getHasParents();
+    }
+
+    @Override
+    public boolean getHasGenes() {
+        return myGenes.getHasGenes();
+    }
+
+    @Override
+    public void setHasParents(int parent1, int parent2) {
+        myGenes.setHasParents(parent1, parent2);
+    }
+
+    @Override
+    public int getParent(boolean isFather) {
+        return myGenes.getParent(isFather);
+    }
+
+    @Override
+    public void updateGenes() {
+        myGenes.updateGenes();
+    }
+
+    @Override
+    public void setHasGenes(boolean bool) {
+        myGenes.setHasGenes(bool);
     }
 
 }
