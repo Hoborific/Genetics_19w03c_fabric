@@ -1,9 +1,9 @@
 {
-  "id": "dyeablechicken",
-  "name": "Dyeable Mobs",
+  "id": "genetics",
+  "name": "Genetics",
   "version": "1.0.0",
   "side": "universal",
-  "initializer": "dyeablechicken.Main",
+  "initializer": "genetics.Main",
   "mixins": {
     "client": "modid.client.json",
     "common": "modid.common.json"
